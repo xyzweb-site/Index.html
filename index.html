@@ -1,1 +1,37 @@
-<h1>HELLO WORLD</h1>
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Login</h2>
+
+<input id="username" placeholder="Username">
+<input id="password" placeholder="Password">
+<button onclick="login()">LOGIN</button>
+
+<p id="result"></p>
+
+<script>
+
+const users = {
+    admin: "1234",
+    player: "abcd"
+}
+
+function login() {
+
+    const username = document.getElementById("username").value
+    const password = document.getElementById("password").value
+
+    if (users[username] === password) {
+        document.getElementById("result").textContent =
+            "LOGIN SUCCESS!"
+    } else {
+        document.getElementById("result").textContent =
+            "WRONG LOGIN"
+    }
+}
+
+</script>
+
+</body>
+</html>
