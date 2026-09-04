@@ -1,38 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,
+initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>EXPER</title>
+<style>
+/* ============================================== */
+
+/* ============================================== */
+</style>
+</head>
 <body>
+<!-- ========================================== -->
 
-<h2>Login</h2>
-
-<input id="username" placeholder="Username">
-<input id="password" placeholder="Password">
-<button onclick="login()">LOGIN</button>
-
-<p id="result"></p>
-
+<!-- ========================================== -->
 <script>
+// ================================================
 
-const users = {
-    admin: "1234",
-    player: "abcd"
-}
-
-function login() {
-
-    const username = document.getElementById("username").value
-    const password = document.getElementById("password").value
-
-    
-    if (users[username] === password) {
-        document.getElementById("result").textContent =
-            "LOGIN SUCCESS!"
-    } else {
-        document.getElementById("result").textContent =
-            "WRONG LOGIN"
-    }
-}
-
+// ================================================
 </script>
-
 </body>
 </html>
