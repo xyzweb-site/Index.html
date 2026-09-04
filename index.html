@@ -10,8 +10,6 @@
 
 <p id="result"></p>
 
-    <input id="test">
-
 <script>
 
 const users = {
@@ -20,12 +18,11 @@ const users = {
 }
 
 function login() {
-    let t = document.getElementById("test").value
-    document.body.appendChild(t)
 
     const username = document.getElementById("username").value
     const password = document.getElementById("password").value
 
+    
     if (users[username] === password) {
         document.getElementById("result").textContent =
             "LOGIN SUCCESS!"
