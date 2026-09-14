@@ -4,20 +4,819 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,
 initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>EXPER</title>
+<title>DODGING BOX</title>
 <style>
 /* ============================================== */
+/* =================================================
+========================== UNIVERSAL
+================================================= */
+*{
+  margin: 0px;
+  padding: 0px;
+  user-select: none;
+}
+/* =================================================
+========================== HTML BODY
+================================================= */
+html, body{
+  width: 100vw;
+  height: 100vh;
+  background: #0f172a;
+  color: white;
+}
+/* =================================================
+========================== BUTTON
+================================================= */
+button{
+  background: linear-gradient(
+  180deg,
+  #FFFFFF 0%,
+  #EAF6FF 100%
+  );
+  border: 3px solid #4DA3FF;
+  box-shadow: 0 5px 0 #1769AA;
+  width: 90px;
+  height: 60px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  font-style: italic;
+  color: #111;
+  transition: .3s;
+}
 
+button:active{
+  transform: scale(.90) translateY(10px);
+  box-shadow: 0 0 0 #1769AA;
+}
+/* =================================================
+========================== SCREEN ACTIVE
+================================================= */
+.screen{
+  display: none;
+}
+
+.active{
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+/* =================================================
+========================== HOMESCREEN
+================================================= */
+#homeScreen{
+  background-image: url('homeBG.png');
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#coinUI{
+  padding: 15px 30px 15px 80px;
+  background-image: url("coinUI.png");
+  background-size: 100% 100%;
+  color: gold;
+  text-shadow: 0px 0px 5px gold;
+  font-size: 20px;
+  font-weight: bold;
+  position: fixed;
+  top: 0%;
+  right: 0%;
+}
+
+#startBtn{
+  border: none;
+  box-shadow: none;
+  background-image: url("startBtn.png");
+  background-size: 100% 100%;
+  padding: none;
+  width: 150px;
+  height: 70px;
+  font-size: 20px;
+  position: fixed;
+  bottom: 0%;
+  right: 0%;
+  margin: 5px;
+}
+/* =================================================
+========================== GAMESCREEN
+================================================= */
+#gameScreen{
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.gameStats{
+  background: rgba(0,0,0,0.2);
+  border: 1px solid white;
+  width: 120px;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  position: fixed;
+  top: 0%;
+  right: 0%;
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.wrap{
+  width: 100%;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid yellow;
+  box-shadow: 0px 0px 5px yellow;
+}
+
+.label{
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.value{
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  color: gold;
+  letter-spacing: 1px;
+}
+
+.wrapDirBtn{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 5%;
+}
+
+.wrapDirBtn button{
+  width: 110px;
+  height: 70px;
+  border: none;
+  box-shadow: none;
+  transition: .5s;
+}
+
+.wrapDirBtn button:active{
+  transform: scale(.90);
+}
+
+#leftBtn{
+  background-image: url('leftBtn.png');
+  background-size: 100% 100%;
+}
+
+#rightBtn{
+  background-image: url('rightBtn.png');
+  background-size: 100% 100%;
+}
 /* ============================================== */
 </style>
 </head>
 <body>
 <!-- ========================================== -->
+<!-- ===============================================
+========================== HOMESCREEN
+================================================= -->
+<screen class="screen active" id="homeScreen">
+  <div id="coinUI">0</div>
+  <button id="startBtn">START</button>
+</screen>
+<!-- ===============================================
+========================== GAMESCREEN
+================================================= -->
+<screen class="screen" id="gameScreen">
+  <canvas id="gameCanvas"></canvas>
+  
+  <div class="gameStats">
+    <div class="wrap">
+      <div class="label">FPS</div>
+      <div class="value" id="fpsIngame">0</div>
+    </div>
+    
+    <div class="wrap">
+      <div class="label">SCORE</div>
+      <div class="value" id="scoreIngame">0</div>
+    </div>
 
+    <div class="wrap">
+      <div class="label">BEST</div>
+      <div class="value" id="bestIngame">0</div>
+    </div>
+
+    <div class="wrap">
+      <div class="label">TIME</div>
+      <div class="value" id="timerIngame">00:00</div>
+    </div>
+
+    <div class="wrap">
+      <div class="label">PLAYER SPEED</div>
+      <div class="value" id="playerSpeedIngame">0</div>
+    </div>
+
+    <div class="wrap">
+      <div class="label">BOX COUNT</div>
+      <div class="value" id="boxCountIngame">0</div>
+    </div>
+
+    <div class="wrap">
+      <div class="label">BOX SPAWN DURATION</div>
+      <div class="value" id="boxSpawnDurationIngame">0</div>
+    </div>
+
+    <div class="wrap">
+      <div class="label">BOX SPEED</div>
+      <div class="value" id="boxSpeedIngame">0</div>
+    </div>
+  </div>
+  
+  <div class="wrapDirBtn">
+    <button id="leftBtn"></button>
+    <button id="rightBtn"></button>
+  </div>
+</screen>
 <!-- ========================================== -->
 <script>
 // ================================================
+// GAMERUNNING
+// GET DOM HELPER
+// SET CANVAS
+// SHOW SCREEN
+// RANDOM NUMBER
+// PLAY SOUND
 
+// FPS
+// SCORE
+// COIN
+// WORLD
+// SPRITES
+// PLAYER
+// DIRECTION
+// BOX
+
+// GAME STATS
+// TIMER
+
+// GAMELOOP
+
+// CLICK START
+// =================================================
+// ======================= GAMERUNNING
+// =================================================
+let gameRunning = false
+// =================================================
+// ======================= GET DOM HELPER
+// =================================================
+const $ = document.getElementById.bind(document)
+const $$ = document.querySelector.bind(document)
+const $$$ = document.querySelectorAll.bind(document)
+// =================================================
+// ======================= SET CANVAS
+// =================================================
+const canvas = $("gameCanvas")
+const ctx = canvas.getContext("2d")
+canvas.width = innerWidth
+canvas.height = innerHeight
+// =================================================
+// ======================= SHOW SCREEN
+// =================================================
+function showScreen(screenID, delay){
+  setTimeout(function(){
+    let screens = $$$(".screen")
+    screens.forEach(s => s.classList.remove("active"))
+    $(screenID).classList.add("active")
+  }, delay)
+}
+// =================================================
+// ======================= RANDOM NUMBER
+// =================================================
+function randomNumber(min, max){
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+// =================================================
+// ======================= PLAY SOUND
+// =================================================
+function playSound(name){
+  name.currentTime = 0
+  //name.play()
+}
+// =================================================
+// ======================= FPS
+// =================================================
+const fpsIngame = $("fpsIngame")
+
+let frames = 0
+let lastTime = performance.now()
+
+function updateFps(time){
+  frames++
+  
+  if(time - lastTime >= 1000){
+    fpsIngame.textContent = frames
+    frames = 0
+    lastTime = time
+  }
+  requestAnimationFrame(updateFps)
+}
+
+requestAnimationFrame(updateFps)
+// =================================================
+// ======================= SCORE
+// =================================================
+let score = 0
+let best = 0
+// =================================================
+// ======================= COIN
+// =================================================
+let coins = 0
+let formatCoin = 0
+
+const coinUI = $("coinUI")
+
+function updateCoin(){
+  formatCoin = coins.toLocaleString()
+  coinUI.textContent = formatCoin
+}
+
+let floatingTexts = [];
+
+function spawnFloatingText(text) {
+  floatingTexts.push({
+    x: player.x + player.size / 2,
+    y: player.y - 10,
+    text: "+" + text,
+    life: 40,
+    maxLife: 40,
+    speedY: -1.2
+  });
+}
+
+function updateFloatingTexts() {
+  for (let i = floatingTexts.length - 1; i >= 0; i--) {
+    let t = floatingTexts[i];
+    t.y += t.speedY;
+    t.life--;
+    
+    if (t.life <= 0) {
+      floatingTexts.splice(i, 1);
+    }
+  }
+}
+
+function drawFloatingTexts() {
+  ctx.save();
+  
+  for (let t of floatingTexts) {
+    ctx.globalAlpha = t.life / t.maxLife;
+    ctx.fillStyle = "gold";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.font = "bold 22px Arial";
+    ctx.textAlign = "center";
+    
+    ctx.strokeText(t.text, t.x, t.y);
+    ctx.fillText(t.text, t.x, t.y);
+  }
+  
+  ctx.restore();
+}
+// =================================================
+// ======================= WORLD
+// =================================================
+let world = {
+  image: new Image(),
+  width: canvas.width,
+  height: canvas.height
+}
+
+world.image.src = "world.png"
+
+function drawWorld(){
+  ctx.drawImage(
+    world.image,
+    0,
+    0,
+    world.width,
+    world.height
+  )
+}
+
+function worldCollision(){
+  if(player.x < 0){
+    player.x = 0
+  }
+  
+  if(player.x + player.size > world.width){
+    player.x = world.width - player.size
+  }
+}
+// =================================================
+// ======================= SPRITES
+// =================================================
+let sprites = {
+  idle: new Image(),
+  dead: new Image(),
+  left1: new Image(),
+  left2: new Image(),
+  left3: new Image(),
+  left4: new Image(),
+  right1: new Image(),
+  right2: new Image(),
+  right3: new Image(),
+  right4: new Image()
+}
+
+sprites.idle.src = "idle.png"
+sprites.dead.src = "dead.png"
+sprites.left1.src = "left1.png"
+sprites.left2.src = "left2.png"
+sprites.left3.src = "left3.png"
+sprites.left4.src = "left4.png"
+sprites.right1.src = "right1.png"
+sprites.right2.src = "right2.png"
+sprites.right3.src = "right3.png"
+sprites.right4.src = "right4.png"
+
+let frame = 0
+
+function updateSpriteFrame(){
+  setInterval(function(){
+    frame < 4
+    ? frame += 1
+    : frame = 1
+  }, 80)
+}
+
+updateSpriteFrame()
+// =================================================
+// ======================= PLAYER
+// =================================================
+let player = {
+  image: new Image(),
+  size: 40,
+  speed: 2.5,
+  x: 0,
+  y: 0
+}
+
+player.image = sprites.idle
+
+function respawnPlayer(){
+  player.x = world.width/2 - player.size/2
+  player.y = world.height - 200
+}
+
+function drawPlayer(){
+ctx.fillStyle = "rgba(0,0,0,0.25)";
+ctx.beginPath();
+ctx.ellipse(
+  player.x + player.size / 2,
+  player.y + player.size - 2,
+  player.size * 0.35,
+  player.size * 0.12,
+  0, 0, Math.PI * 2
+);
+ctx.fill();
+  
+  ctx.drawImage(
+    player.image,
+    player.x,
+    player.y,
+    player.size,
+    player.size
+  )
+}
+
+function playerParticles(){
+  for (let i = 0; i < 15; i++) {
+    particles.push({
+      x: player.x + player.size / 2,
+      y: player.y + player.size / 2,
+      size: randomNumber(3, 5),
+      speedX: randomNumber(-2, 2),
+      speedY: randomNumber(-5, 5),
+      life: 30
+    })
+  }
+}
+// =================================================
+// ======================= DIRECTION
+// =================================================
+let keys = {
+  left: false,
+  right: false
+}
+
+const left = $("leftBtn")
+const right = $("rightBtn")
+
+left.ontouchstart = () => keys.left = true
+left.ontouchend = () => keys.left = false
+
+right.ontouchstart = () => keys.right = true
+right.ontouchend = () => keys.right = false
+
+function updateDir(){
+  if(!gameRunning) return
+  if(keys.left){
+    player.x -= player.speed
+    player.image = sprites[`left${frame}`]
+  }
+  
+  if(keys.right){
+    player.x += player.speed
+    player.image = sprites[`right${frame}`]
+  }
+  
+  if(!keys.left && !keys.right){
+    player.image = sprites.idle
+  }
+}
+// =================================================
+// ======================= BOX
+// =================================================
+let boxPNG = new Image()
+boxPNG.src = "box.png"
+
+let boxSound = new Audio("boxExplode.mp3")
+
+let boxes = []
+
+let spawnMin = 700
+let spawnMax = 1000
+
+let boxSpeedMin = 2
+let boxSpeedMax = 4
+
+let spawnBoxTimer = null
+
+function spawnBox(){
+  if(!gameRunning) return
+  boxes.push({
+    size: randomNumber(25, 50),
+    speed: randomNumber(boxSpeedMin, boxSpeedMax),
+    x: randomNumber(0, world.width - 40),
+    y: -50,
+    coinValue: randomNumber(123, 321)
+  })
+  
+  let spawnDuration = randomNumber(spawnMin, spawnMax)
+  
+  spawnBoxTimer = setTimeout(spawnBox, spawnDuration)
+}
+
+function drawBoxes(){
+  for(let box of boxes){
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5"
+    ctx.fillRect(
+      box.x-5,
+      box.y+5,
+      box.size,
+      box.size
+    )
+    
+    ctx.drawImage(
+      boxPNG,
+      box.x,
+      box.y,
+      box.size,
+      box.size
+    )
+  }
+}
+
+function updateBoxes(){
+  if(!gameRunning) return
+  for(let i = boxes.length - 1; i >= 0; i--){
+    let box = boxes[i]
+    
+    box.y += box.speed
+    
+    if(box.y > world.height){
+      spawnParticle(box)
+      boxes.splice(i, 1)
+      playSound(boxSound)
+      score += 1
+      best = Math.max(best, score)
+      coins += box.coinValue;
+      updateCoin();
+      spawnFloatingText(box.coinValue);
+      saveGame()
+    }
+  }
+}
+
+function stopBoxes(){
+  clearTimeout(spawnBoxTimer)
+  boxes = []
+}
+
+function boxCollision(){
+  for(let box of boxes){
+    let playerRadius = player.size/2
+    let playerCenterX = player.x + playerRadius
+    let playerCenterY = player.y + playerRadius
+    
+    let boxRadius = box.size/2
+    let boxCenterX = box.x + boxRadius
+    let boxCenterY = box.y + boxRadius
+    
+    let radius = playerRadius + boxRadius
+    
+    let distanceX = playerCenterX - boxCenterX
+    let distanceY = playerCenterY - boxCenterY
+    let distance = Math.hypot(distanceX, distanceY)
+    
+    if(distance < radius){
+      alert(`
+      Score: ${score}
+      Time Survived: ${timerIngame.textContent}
+      `)
+      playerParticles()
+      playSound(boxSound)
+      player.image = sprites.dead
+      showScreen("homeScreen", 1000)
+      gameRunning = false
+      stopBoxes()
+      // particles = []
+      keys.left = false
+      keys.right = false
+    }
+  }
+}
+
+let particles = []
+
+function spawnParticle(b){
+  for(let i = 0; i < 10; i++){
+    particles.push({
+      x: b.x + b.size / 2,
+      y: b.y + b.size / 2,
+      size: 4,
+      speedX: randomNumber(-2, 2),
+      speedY: randomNumber(-5, -2),
+      life: 30
+    })
+  }
+}
+
+function updateParticles(){
+  for(let i = particles.length - 1; i >= 0; i--){
+    let p = particles[i]
+    p.x += p.speedX
+    p.y += p.speedY
+    p.life -= 1
+    if(p.life <= 0){
+      particles.splice(i, 1)
+    }
+  }
+}
+
+function drawParticles(){
+  for(let p of particles){
+    ctx.beginPath()
+    ctx.fillStyle = "orange"
+    ctx.arc(
+      p.x,
+      p.y,
+      p.size,
+      0,
+      Math.PI * 2
+    )
+    ctx.fill()
+  }
+}
+// =================================================
+// ======================= GAME STATS
+// =================================================
+const scoreIngame = $("scoreIngame")
+const bestIngame = $("bestIngame")
+const boxCountIngame = $("boxCountIngame")
+const playerSpeedIngame = $("playerSpeedIngame")
+const boxSpawnDurationIngame = $("boxSpawnDurationIngame")
+boxSpawnDurationIngame.style.fontSize = "10px"
+const boxSpeedIngame = $("boxSpeedIngame")
+
+function gameStats(){
+  scoreIngame.textContent = score
+  bestIngame.textContent = best
+  playerSpeedIngame.textContent = player.speed
+  boxCountIngame.textContent = boxes.length
+  boxSpawnDurationIngame.textContent = `${spawnMin} - ${spawnMax}`
+  boxSpeedIngame.textContent = `${boxSpeedMin} - ${boxSpeedMax}`
+}
+// =================================================
+// ======================= TIMER
+// =================================================
+let second = 0
+let timeTimer = null
+
+function updateTimer(){
+  if(!gameRunning) return
+  second++
+  
+  let mins = Math.floor(second/60)
+  let secs = second % 60
+  
+  if(secs === 0){
+    spawnMin -= 100
+    spawnMax -= 100
+    boxSpeedMin += 1
+    boxSpeedMax += 1
+    player.speed += 0.2
+  }
+  
+  timerIngame.textContent = 
+  String(mins).padStart(2, "0") + ":" +
+  String(secs).padStart(2, "0")
+  
+  timeTimer = setTimeout(updateTimer, 1000)
+}
+
+function stopTimer(){
+  clearTimeout(timeTimer)
+  second = 0
+}
+// =================================================
+// ======================= SAVE GAME
+// =================================================
+function saveGame(){
+  localStorage.setItem("saveBest", best)
+  localStorage.setItem("saveCoins", coins)
+}
+// =================================================
+// ======================= LOAD GAME
+// =================================================
+function loadGame(){
+  let savedBest = localStorage.getItem("saveBest")
+  let savedCoins = localStorage.getItem("saveCoins")
+  
+  best = Number(savedBest)
+  coins = Number(savedCoins)
+  
+  updateCoin()
+}
+
+loadGame()
+// =================================================
+// ======================= GAMELOOP
+// =================================================
+function gameloop(){
+  updateDir()
+  worldCollision()
+  
+  updateBoxes()
+  boxCollision()
+  
+  updateParticles()
+  
+  updateFloatingTexts()
+  
+  drawWorld()
+  drawPlayer()
+  drawFloatingTexts()
+  drawBoxes()
+  drawParticles()
+  
+  gameStats()
+  requestAnimationFrame(gameloop)
+}
+
+gameloop()
+// =================================================
+// ======================= CLICK START
+// =================================================
+const startBtn = $("startBtn")
+
+startBtn.addEventListener("click", function(){
+  showScreen("gameScreen", 0)
+  gameRunning = true
+  
+  spawnMin = 100
+  spawnMax = 400
+  boxSpeedMin = 6
+  boxSpeedMax = 7
+  
+  player.speed = 4
+  
+  score = 0
+  
+  respawnPlayer()
+  
+  stopBoxes()
+  spawnBox()
+  
+  stopTimer()
+  updateTimer()
+})
 // ================================================
 </script>
 </body>
